@@ -1,0 +1,28 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: apply common configuration to all nodes
+  hosts: all
+  vars_files:
+    - lamp_vars.yml
+  remote_user: "{{common_remote_user}}"
+  roles:
+    - common
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  vars_files:
+    - lamp_vars.yml
+  remote_user: "{{webservers_remote_user}}"
+
+  roles:
+    - web
+
+- name: deploy MySQL and configure the databases
+  hosts: dbservers
+  vars_files:
+    - lamp_vars.yml
+  remote_user: "{{dbservers_remote_user}}"
+
+  roles:
+    - db
